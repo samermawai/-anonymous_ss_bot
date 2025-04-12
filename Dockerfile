@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-install \
@@ -20,6 +21,7 @@ RUN docker-php-ext-install \
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN composer --version
 
 # Set working directory
 WORKDIR /var/www/html
@@ -27,8 +29,8 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . /var/www/html
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Install PHP dependencies with retry logic
+RUN composer install --no-dev --optimize-autoloader || (sleep 5 && composer install --no-dev --optimize-autoloader)
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \

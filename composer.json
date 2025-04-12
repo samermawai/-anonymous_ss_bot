@@ -11,5 +11,10 @@
         "post-install-cmd": [
             "chmod -R 755 vendor"
         ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
     }
 }

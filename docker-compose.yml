@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - WEBHOOK_URL=${WEBHOOK_URL}
+      - ADMIN_ID=${ADMIN_ID}
+      - CHAT_ID=${CHAT_ID}
+    volumes:
+      - .:/var/www/html
